@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Hearts Card Game</title>
+</head>
+<body>
+<h1>Welcome to Hearts!</h1>
+<h3>Deck:</h3>
+<ul style="list-style: none; padding-left: 0;">
+    {% for card in game.deck.cards %}
+        <li style="display: inline-block; width: 2.3%;">
+            <ul style="display: inline-block; list-style: none; padding-left: 0;">
+                <li style="display: inline-block;">{{ card.rank }}</li>
+                <li style="display: inline-block; color: {{ card.suit_color_html }};">{{ card.suit_symbol_html|safe }}</li>
+            </ul>
+        </li>
+        {% if (game.deck.cards.index(card) + 1) % 13 == 0 %}
+            <li></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{{ game.shuffle_deck() or "" }}
+<h3>Shuffled Deck:</h3>
+<ul style="list-style: none; padding-left: 0;">
+    {% for card in game.deck.cards %}
+        <li style="display: inline-block; width: 2.3%;">
+            <ul style="display: inline-block; list-style: none; padding-left: 0;">
+                <li style="display: inline-block;">{{ card.rank }}</li>
+                <li style="display: inline-block; color: {{ card.suit_color_html }};">{{ card.suit_symbol_html|safe }}</li>
+            </ul>
+        </li>
+        {% if (game.deck.cards.index(card) + 1) % 13 == 0 %}
+            <li></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{{ game.add_players(player_names) or "" }}
+{{ game.shuffle_players() or "" }}
+<h3>Players:</h3>
+<ul style="list-style: none; padding-left: 0;">
+    {% for player in game.players %}
+        <li style="list-style: none; padding-left: 0;">{{ player.name }}</li>
+    {% endfor %}
+</ul>
+{{ game.deal_cards() or "" }}
+{{ utils.sort_player_cards(game.players, game.card_suits, game.card_ranks) or "" }}
+<h3>Initial Deal:</h3>
+<ul style="list-style: none; padding-left: 0;">
+    {% for player in game.players %}
+        <li style="display: inline-block; width: 5%">{{ player.name }}</li>
+        {% for card in player.cards %}
+            <li style="display: inline-block; width: 2.3%;">
+                <ul style="display: inline-block; list-style: none; padding-left: 0;">
+                    <li style="display: inline-block;">{{ card.rank }}</li>
+                    <li style="display: inline-block; color: {{ card.suit_color_html }};">{{ card.suit_symbol_html|safe }}</li>
+                </ul>
+            </li>
+        {% endfor %}
+        <li></li>
+    {% endfor %}
+</ul>
+<h3>3 Card Pass ({{ utils.get_three_card_pass_type_description(game.hand) }}):</h3>
+<ul style="list-style: none; padding-left: 0;">
+    {% for card_pass in game.pass_three_cards(game.hand).items() %}
+        <li style="display: inline-block; width: 7.5%">{{ card_pass[0][0].name + ' => ' +  card_pass[0][1].name }}</li>
+        {% for card in card_pass[1] %}
+            <li style="display: inline-block; width: 2.3%;">
+                <ul style="display: inline-block; list-style: none; padding-left: 0;">
+                    <li style="display: inline-block;">{{ card.rank }}</li>
+                    <li style="display: inline-block; color: {{ card.suit_color_html }};">{{ card.suit_symbol_html|safe }}</li>
+                </ul>
+            </li>
+        {% endfor %}
+        <li></li>
+    {% endfor %}
+</ul>
+
+{{ game.set_player_rotation() or "" }}
+{{ utils.cycle_players_to(game.get_first_player(), game.player_rotation) and "" }}
+{{ game.get_first_player().name }} has the
+<label style="display: inline-block;">{{ game.starting_card.rank }}</label>
+<label style="display: inline-block; color: {{ game.starting_card.suit_color_html }};">{{ game.starting_card.suit_symbol_html|safe }}</label>.
+<h3>Order of play (Clockwise):</h3>
+<ul style="list-style: none; padding-left: 0;">
+    {% for i in range(game.player_count()) %}
+        <li style="list-style: none; padding-left: 0;">{{ game.get_next_player().name }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
