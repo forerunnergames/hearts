@@ -244,7 +244,6 @@ class TestPlayer(unittest.TestCase):
 
 
 class TestUtils(unittest.TestCase):
-
     def test_sort_player_cards(self):
         p1 = hearts.Player("Test Player 1")
         p2 = hearts.Player("Test Player 2")
@@ -289,7 +288,6 @@ class TestUtils(unittest.TestCase):
 
 
 class TestGame(unittest.TestCase):
-
     def test_init(self):
         g = hearts.Game(test_starting_card_rank, test_starting_card_suit, test_card_suits, test_card_ranks)
         self.assertEqual(test_starting_card, g.starting_card)
