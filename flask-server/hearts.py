@@ -212,16 +212,14 @@ class Player:
             self.cards.remove(card)
             trick.add(self, card)
             return trick
+        # Play a random card following suit, if possible; otherwise play a random card.
         card = next((c for c in random.sample(self.cards, len(self.cards)) if c.suit == trick.suit),
                     self.cards[random.randint(0, len(self.cards) - 1)])
         self.cards.remove(card)
         trick.add(self, card)
         return trick
 
-        # Follow suit if possible
-        # if (self.has_card_with_suit(trick.suit))
-
-        # One possible path:
+        # One possible AI behavior tree path:
         # If not possible to follow trick suit, check if trick is full
         # If trick is full, check if trick has points
         # If trick has points, check if player is shooting-the-moon
@@ -413,22 +411,14 @@ app = Flask(__name__, template_folder="../templates")
 
 
 @app.route('/')
-def cards():
+def home_page():
     game = Game(starting_card_rank, starting_card_suit, card_suits, card_ranks)
     game.hand = 1
-    # game.add_players(player_names)
-    # game.shuffle_players()
-    # game.shuffle_deck()
-    # game.deal_cards()
-    # Utils.sort_player_cards(game.players, card_suits, card_ranks)
-    ordinals = ["1st", "2nd", "3rd", "4th"]
-    max_points = 100
-    # deck_json = json.dumps(deck, default=lambda x: x.encode())
-    # return deck_json
     return render_template('index.html', game=game, player_names=player_names, utils=Utils)
 
 
 if __name__ == "__main__":
+    # Run Flask app
     app.run(debug=True)
-
-Game(starting_card_rank, starting_card_suit, card_suits, card_ranks).start()
+    # Run console app
+    # Game(starting_card_rank, starting_card_suit, card_suits, card_ranks).start()
